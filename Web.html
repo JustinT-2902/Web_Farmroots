@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmroots</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to use custom colors matching the new design brief: light green, white, and yellow accents
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-light-green': '#8BC34A', // Light green (main background for sections, header)
+                        'accent-yellow': '#FFD700',       // Gold/Yellow (for highlights, buttons hover, icons)
+                        'dark-green': '#558B2F',          // Darker green (for headings, strong accents)
+                        'text-dark': '#333333',           // Dark text for readability
+                        'text-light-grey': '#6B7280',     // Lighter text for descriptions
+                        'bg-white': '#FFFFFF',            // Pure white for main content blocks
+                        'bg-subtle-grey': '#F8F8F8',      // Very light grey for subtle section breaks
+                        'nav-gray': '#E5E7EB',            // A light gray for the nav bar
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // Use Inter font as requested
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for any specific needs not easily covered by Tailwind or for overrides */
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        .section-separator {
+            width: 80px;
+            height: 4px;
+            background-color: theme('colors.accent-yellow'); /* Yellow separator */
+            margin: 1.5rem auto 2.5rem;
+            border-radius: 9999px; /* Fully rounded */
+        }
+        /* Hide mobile menu by default */
+        #mobile-menu {
+            display: none;
+        }
+        /* Show mobile menu when active */
+        #mobile-menu.active {
+            display: flex; /* Or block, depending on layout preference */
+            flex-direction: column;
+            align-items: center;
+        }
+        /* Adjust iframe for responsiveness */
+        .video-placeholder, .map-placeholder {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem; /* More rounded corners for video/map */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+        .video-placeholder iframe, .map-placeholder iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none; /* Remove default iframe border */
+        }
+        /* Fade-in animation for hero text */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .animate-fade-in.delay-200 { animation-delay: 0.2s; }
+
+        /* Specific style for blurred background image */
+        .hero-background-blur {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8; /* Adjusted opacity to allow blur to be visible */
+            filter: blur(4px); /* Apply blur effect */
+            -webkit-filter: blur(4px); /* For Safari compatibility */
+            transform: scale(1.05); /* Slightly scale up to avoid blurry edges after blur */
+        }
+    </style>
+</head>
+<body class="font-sans text-text-dark bg-bg-white">
+
+    <!-- Header Section -->
+    <header class="bg-nav-gray text-text-dark shadow-lg fixed w-full z-50 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="#home" class="flex items-center space-x-2">
+                    <!-- Placeholder logo image. Adjusted to dark green on white for better contrast on nav bar -->
+                    <img src="https://placehold.co/40x40/558B2F/FFFFFF?text=FR" alt="Logo Farmroots" class="rounded-full shadow-md">
+                    <span class="text-xl font-bold tracking-tight">Farmroots</span>
+                </a>
+            </div>
+
+            <!-- Navigation Menu for Desktop -->
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6 lg:space-x-8">
+                    <li><a href="#home" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Trang chủ</a></li>
+                    <li><a href="#about" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Giới thiệu</a></li>
+                    <li><a href="#activities" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Hoạt động</a></li>
+                    <li><a href="#knowledge" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Kiến thức</a></li>
+                    <li><a href="#news" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Tin tức</a></li>
+                    <li><a href="#members" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Hội viên</a></li>
+                    <li><a href="#gallery" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Thư viện</a></li>
+                    <li><a href="#contact" class="py-2 px-3 rounded-md hover:bg-primary-light-green hover:text-white transition duration-300 text-center block">Liên hệ</a></li>
+                </ul>
+            </nav>
+
+            <!-- Mobile Menu Toggle Button -->
+            <div class="md:hidden">
+                <button class="menu-toggle focus:outline-none p-2 rounded-md hover:bg-primary-light-green transition duration-300">
+                    <i class="fas fa-bars text-text-dark text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Navigation Overlay -->
+        <nav class="md:hidden bg-white pb-4 mt-2" id="mobile-menu">
+            <ul class="flex flex-col items-center space-y-4">
+                <li><a href="#home" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Trang chủ</a></li>
+                <li><a href="#about" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Giới thiệu</a></li>
+                <li><a href="#activities" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Hoạt động</a></li>
+                <li><a href="#knowledge" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Kiến thức</a></li>
+                <li><a href="#news" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Tin tức</a></li>
+                <li><a href="#members" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Hội viên</a></li>
+                <li><a href="#gallery" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Thư viện</a></li>
+                <li><a href="#contact" class="block py-2 px-4 hover:bg-primary-light-green rounded-md w-full text-center transition duration-300">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="pt-20"> <!-- Padding top to account for fixed header -->
+
+        <!-- Home Section -->
+        <section id="home" class="relative bg-primary-light-green text-white py-16 md:py-24 lg:py-32 overflow-hidden">
+            <!-- Background image with blur effect -->
+            <div class="hero-background-blur" style="background-image: url('https://i.pinimg.com/736x/2c/cb/4f/2ccb4f459f3e11ed43920cb0be7dcf31.jpg');"></div>
+            <!-- Overlay to darken background image and ensure text readability -->
+            <div class="absolute inset-0 bg-dark-green opacity-40"></div>
+
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div class="bg-dark-green bg-opacity-80 p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xl max-w-4xl mx-auto">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 animate-fade-in">Chào mừng đến với Farmroots</h1>
+                    <p class="text-lg sm:text-xl lg:text-2xl mb-8 animate-fade-in delay-200">
+                        Nơi kết nối, chia sẻ và phát triển bền vững ngành sầu riêng Việt Nam.
+                    </p>
+                    <a href="#about" class="inline-block bg-accent-yellow text-dark-green font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-white border-2 border-accent-yellow">Tìm hiểu thêm</a>
+                </div>
+
+                <div class="mt-16 bg-bg-white p-6 rounded-2xl shadow-xl text-text-dark">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-dark-green mb-4">Về Farmroots</h2>
+                    <div class="section-separator"></div>
+                    <p class="text-md sm:text-lg leading-relaxed text-text-light-grey">
+                        Farmroots được thành lập với tầm nhìn trở thành cầu nối vững chắc, quy tụ những người đam mê và tâm huyết với cây sầu riêng. Sứ mệnh của chúng tôi là lan tỏa kiến thức, kinh nghiệm canh tác tiên tiến, thúc đẩy liên kết sản xuất và tiêu thụ bền vững, góp phần nâng cao giá trị và vị thế của sầu riêng Việt Nam trên thị trường quốc tế. Chúng tôi đề cao các giá trị: Khoa học - Bền vững - Cộng đồng - Đồng hành.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                    <div class="bg-bg-white p-6 rounded-2xl shadow-xl">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-dark-green mb-4">Tin tức mới nhất</h2>
+                        <div class="section-separator"></div>
+                        <div class="space-y-4 text-left">
+                            <div class="p-4 bg-bg-subtle-grey rounded-xl border border-gray-100 shadow-sm">
+                                <h3 class="text-lg font-semibold text-dark-green">Giá sầu riêng tăng cao kỷ lục đầu mùa</h3>
+                                <p class="text-sm text-text-light-grey mt-1">Cập nhật ngày 15/06/2025</p>
+                                <p class="text-md mt-2 text-text-dark">Thông tin chi tiết về tình hình giá cả sầu riêng tại các vùng trọng điểm, dự báo xu hướng thị trường sắp tới.</p>
+                                <a href="#" class="text-primary-light-green hover:underline mt-2 inline-block font-medium">Đọc thêm <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                            </div>
+                            <div class="p-4 bg-bg-subtle-grey rounded-xl border border-gray-100 shadow-sm">
+                                <h3 class="text-lg font-semibold text-dark-green">Hội thảo "Canh tác sầu riêng bền vững" thành công tốt đẹp</h3>
+                                <p class="text-sm text-text-light-grey mt-1">Cập nhật ngày 10/06/2025</p>
+                                <p class="text-md mt-2 text-text-dark">Tổng kết các bài tham luận và kết quả đạt được từ hội thảo chuyên đề về canh tác sầu riêng theo hướng hữu cơ.</p>
+                                <a href="#" class="text-primary-light-green hover:underline mt-2 inline-block font-medium">Đọc thêm <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-bg-white p-6 rounded-2xl shadow-xl">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-dark-green mb-4">Video giới thiệu Farmroots</h2>
+                        <div class="section-separator"></div>
+                        <div class="video-placeholder">
+                            <!-- Replace YOUR_VIDEO_ID with an actual YouTube video ID -->
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-sm text-text-light-grey mt-4">Xem video để hiểu rõ hơn về Farmroots và các hoạt động của chúng tôi.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-16 md:py-24 bg-bg-subtle-grey">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Giới thiệu về Farmroots</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12 items-center bg-bg-white p-8 rounded-2xl shadow-xl">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-dark-green mb-3">Lịch Sử Hình Thành</h3>
+                        <p class="text-lg leading-relaxed text-text-light-grey">
+                            Farmroots được ấp ủ và chính thức ra mắt vào tháng 6 năm 2021, xuất phát từ mong muốn tập hợp những người nông dân, kỹ sư, chuyên gia và thương nhân cùng chí hướng, tạo nên một cộng đồng vững mạnh vì sự phát triển của cây sầu riêng và bưởi Việt Nam.
+                        </p>
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="https://i.pinimg.com/736x/42/68/0e/42680e12d0d8faefb9a47db348464d13.jpg" alt="Lịch sử hình thành Farmroots" class="rounded-lg shadow-md w-full max-w-md">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-16 items-center bg-bg-white p-8 rounded-2xl shadow-xl">
+                    <div class="md:order-2">
+                        <h3 class="text-2xl font-semibold text-dark-green mb-3">Ban Điều Hành</h3>
+                        <p class="text-lg leading-relaxed text-text-light-grey">
+                            Ban điều hành Farmroots gồm những thành viên có nhiều năm kinh nghiệm trong lĩnh vực nông nghiệp, đặc biệt là cây sầu riêng. Họ là những người tận tâm, nhiệt huyết, luôn sẵn sàng lắng nghe và hỗ trợ hội viên. Danh sách cụ thể các thành viên ban điều hành sẽ được cập nhật chi tiết tại trang Hội viên.
+                        </p>
+                    </div>
+                    <div class="flex justify-center md:order-1">
+                        <img src="https://i.pinimg.com/736x/4d/98/a6/4d98a6e30647fe53f48ceb544f9bb743.jpg" alt="Ban điều hành Farmroots" class="rounded-lg shadow-md w-full max-w-md">
+                    </div>
+                </div>
+
+                <div class="mt-16 bg-bg-white p-8 rounded-2xl shadow-xl">
+                    <h3 class="text-2xl font-semibold text-dark-green text-center mb-3">Đối Tác Chiến Lược</h3>
+                    <div class="section-separator"></div>
+                    <p class="text-lg leading-relaxed text-text-light-grey text-center mb-8">
+                        Farmroots tự hào có mối quan hệ hợp tác bền chặt với nhiều đối tác uy tín trong và ngoài nước, bao gồm các công ty phân bón, thuốc bảo vệ thực vật sinh học, đơn vị cung ứng giống cây, và các doanh nghiệp xuất khẩu nông sản hàng đầu.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- Placeholder partner logos. Replace with actual logos. -->
+                        <div class="bg-bg-subtle-grey p-4 rounded-xl shadow-sm flex justify-center items-center hover:shadow-md transition duration-300">
+                            <img src="https://placehold.co/120x60/8BC34A/FFFFFF?text=Doi+Tac+A" alt="Đối tác A" class="h-12 object-contain">
+                        </div>
+                        <div class="bg-bg-subtle-grey p-4 rounded-xl shadow-sm flex justify-center items-center hover:shadow-md transition duration-300">
+                            <img src="https://placehold.co/120x60/8BC34A/FFFFFF?text=Doi+Tac+B" alt="Đối tác B" class="h-12 object-contain">
+                        </div>
+                        <div class="bg-bg-subtle-grey p-4 rounded-xl shadow-sm flex justify-center items-center hover:shadow-md transition duration-300">
+                            <img src="https://placehold.co/120x60/8BC34A/FFFFFF?text=Doi+Tac+C" alt="Đối tác C" class="h-12 object-contain">
+                        </div>
+                        <div class="bg-bg-subtle-grey p-4 rounded-xl shadow-sm flex justify-center items-center hover:shadow-md transition duration-300">
+                            <img src="https://placehold.co/120x60/8BC34A/FFFFFF?text=Doi+Tac+D" alt="Đối tác D" class="h-12 object-contain">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 text-center bg-bg-white p-8 rounded-2xl shadow-xl">
+                    <h3 class="text-2xl font-semibold text-dark-green mb-3">Thành Tựu</h3>
+                    <div class="section-separator"></div>
+                    <ul class="list-disc list-inside text-lg leading-relaxed text-text-light-grey space-y-2 max-w-2xl mx-auto">
+                        <li>Tổ chức thành công hơn 20 khóa tập huấn kỹ thuật cho hàng nghìn nông dân.</li>
+                        <li>Kết nối tiêu thụ sản phẩm cho hàng trăm tấn sầu riêng đạt chuẩn.</li>
+                        <li>Xây dựng mạng lưới hội viên rộng khắp, hỗ trợ lẫn nhau trong sản xuất.</li>
+                        <li>Đóng góp vào việc xây dựng quy trình canh tác sầu riêng an toàn theo tiêu chuẩn VietGAP, GlobalGAP.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="activities" class="py-16 md:py-24 bg-bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Hoạt động Farmroots</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-calendar-alt text-4xl text-primary-light-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-dark-green mb-3">Lịch sinh hoạt định kỳ</h3>
+                        <p class="text-md text-text-light-grey">
+                            Farmroots tổ chức sinh hoạt định kỳ vào tuần thứ 2 hàng tháng tại Văn phòng Farmroots hoặc các vườn mẫu. Đây là dịp để hội viên cùng nhau trao đổi kinh nghiệm, cập nhật thông tin và giải đáp thắc mắc.
+                        </p>
+                        <a href="#" class="text-accent-yellow hover:text-dark-green hover:underline mt-4 inline-block font-medium">Xem lịch chi tiết <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                    </div>
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-chalkboard-teacher text-4xl text-primary-light-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-dark-green mb-3">Khóa tập huấn kỹ thuật</h3>
+                        <p class="text-md text-text-light-grey">
+                            Các khóa tập huấn chuyên sâu về quy trình trồng, chăm sóc, phòng trừ sâu bệnh, bón phân, thu hoạch sầu riêng theo tiêu chuẩn VietGAP, GlobalGAP được tổ chức thường xuyên.
+                        </p>
+                        <a href="#" class="text-accent-yellow hover:text-dark-green hover:underline mt-4 inline-block font-medium">Đăng ký khóa học <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                    </div>
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-comments text-4xl text-primary-light-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-dark-green mb-3">Hội thảo chuyên đề</h3>
+                        <p class="text-md text-text-light-grey">
+                            Farmroots thường xuyên mời các chuyên gia hàng đầu trong ngành đến chia sẻ tại các buổi hội thảo về xu hướng thị trường, công nghệ mới, và các giải pháp canh tác hiệu quả.
+                        </p>
+                        <a href="#" class="text-accent-yellow hover:text-dark-green hover:underline mt-4 inline-block font-medium">Xem thông tin hội thảo <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                    </div>
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-tree text-4xl text-primary-light-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-dark-green mb-3">Tham quan vườn mẫu</h3>
+                        <p class="text-md text-text-light-grey">
+                            Những chuyến tham quan thực tế các vườn sầu riêng kiểu mẫu, ứng dụng công nghệ cao giúp hội viên học hỏi kinh nghiệm trực tiếp và mở rộng kiến thức thực tiễn.
+                        </p>
+                        <a href="#" class="text-accent-yellow hover:text-dark-green hover:underline mt-4 inline-block font-medium">Tham gia chuyến đi <i class="fas fa-arrow-right text-sm ml-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Knowledge Base Section -->
+        <section id="knowledge" class="py-16 md:py-24 bg-bg-subtle-grey">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Kiến thức - Kỹ thuật</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-dark-green mb-4">Quy trình kỹ thuật</h3>
+                        <div class="space-y-4">
+                            <details class="bg-bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                                <summary class="font-medium text-lg text-primary-light-green cursor-pointer hover:text-dark-green transition duration-200">Quy trình trồng và chăm sóc sầu riêng</summary>
+                                <p class="text-text-light-grey mt-2">Hướng dẫn chi tiết từ khâu chọn giống, làm đất, trồng cây, bón phân, tưới nước đến tỉa cành, tạo tán cho cây sầu riêng ở từng giai đoạn phát triển.</p>
+                            </details>
+                            <details class="bg-bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                                <summary class="font-medium text-lg text-primary-light-green cursor-pointer hover:text-dark-green transition duration-200">Quy trình phòng trừ sâu bệnh hại sầu riêng</summary>
+                                <p class="text-text-light-grey mt-2">Các biện pháp phòng ngừa và xử lý hiệu quả các loại sâu bệnh thường gặp trên cây sầu riêng, ưu tiên sử dụng các biện pháp sinh học và quản lý dịch hại tổng hợp (IPM).</p>
+                            </details>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold text-dark-green mt-10 mb-4">Cách sử dụng sản phẩm sinh học</h3>
+                        <p class="text-lg leading-relaxed text-text-light-grey mb-6">
+                            Tìm hiểu về các sản phẩm phân bón hữu cơ, thuốc trừ sâu sinh học, chế phẩm sinh học kích thích tăng trưởng... Hướng dẫn chi tiết về liều lượng, cách pha trộn và thời điểm sử dụng tối ưu để đạt hiệu quả cao nhất và đảm bảo an toàn cho môi trường.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary-light-green hover:text-dark-green hover:underline font-medium">
+                            Tải tài liệu hướng dẫn <i class="fas fa-download ml-2"></i>
+                        </a>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-semibold text-dark-green mb-4">Hướng dẫn cấp mã vùng</h3>
+                        <p class="text-lg leading-relaxed text-text-light-grey mb-6">
+                            Mã vùng trồng là yếu tố quan trọng để sầu riêng Việt Nam có thể xuất khẩu chính ngạch sang các thị trường khó tính. Chúng tôi cung cấp hướng dẫn chi tiết về quy trình, hồ sơ, và các tiêu chuẩn cần thiết để đăng ký và được cấp mã vùng trồng theo quy định của Bộ Nông nghiệp & Phát triển Nông thôn.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary-light-green hover:text-dark-green hover:underline font-medium">
+                            Xem quy trình chi tiết <i class="fas fa-external-link-alt ml-2"></i>
+                        </a>
+
+                        <h3 class="text-2xl font-semibold text-dark-green mt-10 mb-4">Câu hỏi thường gặp (FAQ)</h3>
+                        <div class="space-y-4">
+                            <details class="bg-bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                                <summary class="font-medium text-lg text-primary-light-green cursor-pointer hover:text-dark-green transition duration-200">Làm sao để sầu riêng ra hoa trái vụ?</summary>
+                                <p class="text-text-light-grey mt-2">Kỹ thuật xử lý ra hoa nghịch vụ đòi hỏi kiểm soát chặt chẽ các yếu tố dinh dưỡng, nước và ánh sáng. Farmroots có các chuyên gia sẵn sàng tư vấn trực tiếp.</p>
+                            </details>
+                            <details class="bg-bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                                <summary class="font-medium text-lg text-primary-light-green cursor-pointer hover:text-dark-green transition duration-200">Sầu riêng bị nứt trái do nguyên nhân gì và cách khắc phục?</summary>
+                                <p class="text-text-light-grey mt-2">Nứt trái thường do sốc nước hoặc thiếu canxi. Biện pháp khắc phục bao gồm điều chỉnh chế độ tưới và bổ sung dinh dưỡng kịp thời.</p>
+                            </details>
+                            <details class="bg-bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                                <summary class="font-medium text-lg text-primary-light-green cursor-pointer hover:text-dark-green transition duration-200">Sầu riêng con bị vàng lá phải làm sao?</summary>
+                                <p class="text-text-light-grey mt-2">Vàng lá có thể do thiếu dinh dưỡng, ngập úng hoặc sâu bệnh. Cần kiểm tra kỹ để xác định nguyên nhân và đưa ra giải pháp phù hợp.</p>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News & Market Section -->
+        <section id="news" class="py-16 md:py-24 bg-bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Tin tức - Thị trường</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <img src="https://placehold.co/400x250/558B2F/FFFFFF?text=Tin Xuất Khẩu" alt="Tin xuất khẩu sầu riêng" class="w-full h-48 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold text-dark-green mb-2">Trung Quốc mở rộng nhập khẩu sầu riêng Việt Nam</h3>
+                        <p class="text-sm text-text-light-grey mb-3">Ngày đăng: 20/06/2025</p>
+                        <p class="text-md text-text-dark">Tin vui cho nông dân khi các cửa khẩu chính thức thông quan nhiều hơn, tạo cơ hội lớn cho sầu riêng Việt Nam.</p>
+                        <a href="#" class="text-primary-light-green hover:underline mt-4 inline-block font-medium">Đọc thêm <i class="fas fa-angle-double-right text-sm ml-1"></i></a>
+                    </div>
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <img src="https://placehold.co/400x250/558B2F/FFFFFF?text=Giá Thị Trường" alt="Giá thị trường sầu riêng" class="w-full h-48 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold text-dark-green mb-2">Cập nhật giá sầu riêng tại vườn và thị trường lớn</h3>
+                        <p class="text-sm text-text-light-grey mb-3">Ngày đăng: 21/06/2025</p>
+                        <p class="text-md text-text-dark">Biểu đồ biến động giá sầu riêng trong tuần qua và dự báo xu hướng giá trong những tháng tới.</p>
+                        <a href="#" class="text-primary-light-green hover:underline mt-4 inline-block font-medium">Xem chi tiết <i class="fas fa-angle-double-right text-sm ml-1"></i></a>
+                    </div>
+                    <div class="bg-bg-subtle-grey p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        <img src="https://placehold.co/400x250/558B2F/FFFFFF?text=Tin Cảnh Báo" alt="Cảnh báo kỹ thuật sầu riêng" class="w-full h-48 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold text-dark-green mb-2">Cảnh báo sâu bệnh mùa mưa cho cây sầu riêng</h3>
+                        <p class="text-sm text-text-light-grey mb-3">Ngày đăng: 18/06/2025</p>
+                        <p class="text-md text-text-dark">Các dấu hiệu nhận biết và biện pháp phòng ngừa, xử lý kịp thời các loại nấm, bệnh hại phát triển mạnh trong mùa mưa.</p>
+                        <a href="#" class="text-primary-light-green hover:underline mt-4 inline-block font-medium">Đọc cảnh báo <i class="fas fa-angle-double-right text-sm ml-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Member Zone Section -->
+        <section id="members" class="py-16 md:py-24 bg-bg-subtle-grey">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Góc hội viên</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                    <div class="bg-bg-white p-8 rounded-2xl shadow-xl">
+                        <h3 class="text-2xl font-semibold text-dark-green mb-6 text-center">Đăng ký gia nhập Farmroots</h3>
+                        <form action="#" method="POST" class="space-y-6">
+                            <div>
+                                <label for="member_name" class="block text-text-dark text-lg font-medium mb-2">Họ và tên:</label>
+                                <input type="text" id="member_name" name="member_name" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="member_email" class="block text-text-dark text-lg font-medium mb-2">Email:</label>
+                                <input type="email" id="member_email" name="member_email" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="member_phone" class="block text-text-dark text-lg font-medium mb-2">Số điện thoại:</label>
+                                <input type="tel" id="member_phone" name="member_phone"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="member_message" class="block text-text-dark text-lg font-medium mb-2">Lời nhắn (optional):</label>
+                                <textarea id="member_message" name="member_message" rows="4"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="bg-primary-light-green hover:bg-dark-green text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                                    Đăng ký gia nhập
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="space-y-12">
+                        <div class="bg-bg-white p-8 rounded-2xl shadow-xl">
+                            <h3 class="text-2xl font-semibold text-dark-green mb-4 text-center">Danh sách hội viên</h3>
+                            <div class="section-separator"></div>
+                            <p class="text-lg leading-relaxed text-text-light-grey mb-4">
+                                Farmroots có một cộng đồng hội viên năng động và đa dạng, từ nông dân lâu năm đến các chuyên gia trẻ tuổi. Danh sách chi tiết và profile của hội viên sẽ được hiển thị tại khu vực dành riêng cho hội viên sau khi đăng nhập, nhằm bảo mật thông tin cá nhân.
+                            </p>
+                            <div class="text-center">
+                                <a href="#" class="inline-block bg-dark-green hover:bg-primary-light-green text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                                    Đăng nhập để xem
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-bg-white p-8 rounded-2xl shadow-xl">
+                            <h3 class="text-2xl font-semibold text-dark-green mb-4 text-center">Chia sẻ kinh nghiệm</h3>
+                            <div class="section-separator"></div>
+                            <p class="text-lg leading-relaxed text-text-light-grey mb-4">
+                                Đây là không gian mở để tất cả hội viên của Farmroots có thể đăng tải các bài viết, hình ảnh, video chia sẻ về kinh nghiệm canh tác, mẹo hay, hay những câu chuyện thực tế về cây sầu riêng. Các thành viên có thể bình luận, trao đổi và học hỏi lẫn nhau.
+                            </p>
+                            <div class="text-center">
+                                <a href="#" class="inline-block bg-accent-yellow text-dark-green font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105 hover:bg-primary-light-green hover:text-white">
+                                    Đăng bài chia sẻ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-16 md:py-24 bg-bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Thư viện hình ảnh & video</h2>
+                <div class="section-separator"></div>
+
+                <h3 class="text-2xl font-semibold text-dark-green mb-6 mt-12 text-center">Ảnh hoạt động Farmroots</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Placeholder images for activities. Adjusted colors. -->
+                    <div class="overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105 border border-gray-100">
+                        <img src="https://i.pinimg.com/736x/0d/4f/3c/0d4f3c8f18cab286efcdaf7a98714334.jpg" alt="Hoạt động Farmroots 1" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark">Hội thảo kỹ thuật</div>
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105 border border-gray-100">
+                        <img src="https://cdn2.tuoitre.vn/thumb_w/480/2022/4/29/logo-sau-rieng-2-16512095916691185498641.jpg" alt="Hoạt động Farmroots 2" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark">Tham quan vườn mẫu</div>
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105 border border-gray-100">
+                        <img src="https://placehold.co/400x300/8BC34A/FFFFFF?text=Hoat+Dong+3" alt="Hoạt động Farmroots 3" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark">Lễ ra mắt Farmroots</div>
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105 border border-gray-100">
+                        <img src="https://i.pinimg.com/736x/15/46/57/154657e5b8393753a45bdd2f307b2598.jpg" alt="Hoạt động Farmroots 4" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark">Trao đổi kinh nghiệm</div>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-dark-green mb-6 mt-16 text-center">Video kỹ thuật canh tác</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Placeholder videos. Retained original IDs. -->
+                    <div class="video-placeholder shadow-md hover:shadow-xl transition duration-300">
+                        <iframe src="https://www.youtube.com/embed/Pj1c81z25mI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="p-2 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark rounded-b-xl">Kỹ thuật bón phân cho sầu riêng</div>
+                    </div>
+                    <div class="video-placeholder shadow-md hover:shadow-xl transition duration-300">
+                        <iframe src="https://www.youtube.com/embed/oP26o5tDk8A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="p-2 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark rounded-b-xl">Phòng trừ bệnh thối rễ sầu riêng</div>
+                    </div>
+                    <div class="video-placeholder shadow-md hover:shadow-xl transition duration-300">
+                        <iframe src="https://www.youtube.com/embed/5qap5aO42lA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="p-2 bg-bg-subtle-grey text-center text-sm font-medium text-text-dark rounded-b-xl">Thu hoạch và bảo quản sầu riêng</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-bg-subtle-grey">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-dark-green mb-6">Liên hệ Farmroots</h2>
+                <div class="section-separator"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                    <div class="bg-bg-white p-8 rounded-2xl shadow-xl">
+                        <h3 class="text-2xl font-semibold text-dark-green mb-6 text-center">Thông tin liên hệ</h3>
+                        <div class="space-y-4 text-center text-lg">
+                            <p class="flex items-center justify-start text-text-dark" style="margin-left: 40px;"><i class="fas fa-envelope mr-3 text-primary-light-green"></i> Email: <a href="mailto:info@farmroots.com" class="text-blue-600 hover:underline ml-2">info@farmroots.com</a></p>
+                            <p class="flex items-center justify-start text-text-dark" style="margin-left: 40px;"><i class="fas fa-phone-alt mr-3 text-primary-light-green"></i> Hotline: <a href="tel:+84123456789" class="text-blue-600 hover:underline ml-2">0123 456 789</a></p>
+                            <p class="flex items-center justify-start text-text-dark" style="margin-left: 40px;"><i class="fab fa-facebook mr-3 text-primary-light-green"></i> Fanpage: <a href="https://facebook.com/farmroots" target="_blank" class="text-blue-600 hover:underline ml-2">Farmroots Fanpage</a></p>
+                            <p class="flex items-center justify-start text-text-dark" style="margin-left: 36px;"><img src="https://genesisfund.com.vn/wp-content/themes/reputheme/images/icons/contact_zalo.png" alt="Zalo" class="w-6 h-6 mr-3 inline-block text-primary-light-green" />
+
+                    
+                                Zalo: <a href="https://zalo.me/YOUR_ZALO_ID" target="_blank" class="text-blue-600 hover:underline ml-2">Farmroots Zalo</a>
+                            </p>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold text-dark-green mb-4 mt-10 text-center">Bản đồ vị trí</h3>
+                        <div class="video-placeholder map-placeholder">
+                            <!-- Replace with your actual Google Maps embed code -->
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15678.966952778007!2d106.697669!3d10.76288795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f1e72e12e75%3A0xb3513a8080f4a8e!2sIndependence%20Palace!5e0!3m2!1sen!2sus!4v1678901234567!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="bg-bg-white p-8 rounded-2xl shadow-xl">
+                        <h3 class="text-2xl font-semibold text-dark-green mb-6 text-center">Form đăng ký nhận thông tin</h3>
+                        <form action="#" method="POST" class="space-y-6">
+                            <div>
+                                <label for="subscribe_name" class="block text-text-dark text-lg font-medium mb-2">Họ và tên (Optional):</label>
+                                <input type="text" id="subscribe_name" name="subscribe_name"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="subscribe_email" class="block text-text-dark text-lg font-medium mb-2">Email của bạn:</label>
+                                <input type="email" id="subscribe_email" name="subscribe_email" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="subscribe_interest" class="block text-text-dark text-lg font-medium mb-2">Bạn quan tâm đến:</label>
+                                <select id="subscribe_interest" name="subscribe_interest"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light-green focus:border-transparent transition duration-300 shadow-sm">
+                                    <option value="">-- Chọn lĩnh vực --</option>
+                                    <option value="news">Tin tức thị trường</option>
+                                    <option value="technical">Kiến thức kỹ thuật</option>
+                                    <option value="activities">Hoạt động Farmroots</option>
+                                    <option value="all">Tất cả</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="bg-accent-yellow hover:bg-primary-light-green text-dark-green hover:text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 border-2 border-accent-yellow hover:border-primary-light-green">
+                                    Đăng ký nhận tin
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark-green text-white py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
+            <p>&copy; 2025 Farmroots. Bảo lưu mọi quyền.</p>
+            <div class="social-links flex space-x-6">
+                <a href="https://facebook.com/farmroots" target="_blank" aria-label="Facebook" class="text-white hover:text-accent-yellow transition duration-300">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="https://www.youtube.com/@farmroots" target="_blank" aria-label="YouTube" class="text-white hover:text-accent-yellow transition duration-300">
+                    <i class="fab fa-youtube text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuToggle && mobileMenu) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                });
+
+                // Close mobile menu when a link is clicked (for smooth scrolling)
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
